@@ -3,8 +3,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage{anysize}
 \usepackage{setspace}
-\usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage{hyperref}
+\usepackage[pdftex]{graphicx}
 \begin{document}
 \title{Dinámica del sólido rígido. Giróscopo}
 \author{Álvaro Díaz Carmona}
@@ -16,21 +17,185 @@
 En este informe se reproduce un experimento para analizar el movimiento de un sólido rígido. El objetivo principal es la determinación de uno de los momentos de inercia de este sólido y el estudio de su rotación, precesión y nutación.
 
 \end{abstract}
-%
-%\section{Introducción}
-%\section{Fundamento Teórico}
-%Supóngase un sólido libre de girar sin rozamiento en torno a un punto fijo cuya velocidad angular inicial $\omega$ es constante y se encuentra en la parte positiva del eje $Z$. Su momento angular quedará definido por:
-%\begin{equation}
-%\label{definercia}
-%\overrightarrow{L}=I_z \omega \hat{e}_{z}
-%\end{equation}
-%\section{Material y Metodología}
-%\section{Datos recogidos}
-%\section{Resultados}
-%\section{Conclusiones}
-%\section*{Apéndices}
-%\subsection*{Apéndice de errores}
-%\subsection*{Apéndice de imágenes}
+
+\section{Introducción}
+\section{Fundamento Teórico}
+Supóngase un sólido libre de girar sin rozamiento en torno a un punto fijo cuya velocidad angular inicial $\omega$ es constante y se encuentra en la parte positiva del eje $Z$. Su momento angular $\vec{L}$ quedará definido por:
+\begin{equation}
+\label{defL}
+\vec{L}=I_z \omega\, \hat{e}_{z}
+\end{equation}
+Siendo $I_z$ el momento de inercia respecto al eje $Z$ y $\hat{e}_{z}$ el versor de ese mismo eje. En ausencia de momentos externos $\vec{M}_{ext}$	el momento angular no varía y se mantiene la dirección del eje de rotación. Matemáticamente
+\begin{equation}
+\frac{\mathrm{d}\vec{L}}{\mathrm{d}t}=\sum \vec{M}_{ext} =0\Leftrightarrow\vec{L}=cte\,.
+\end{equation}
+Si se cuelga un cuerpo de masa $m$ en un extremo del eje $Z$, se ejerce una fuerza peso $\vec{P}=m\vec{g}$ y, sabiendo que el momento de una fuerza es el producto vectorial de esta por el vector posición del punto de aplicación de la fuerza $\vec{r}\equiv d\hat{e}_z$, entonces obtenemos la siguiente ecuación: 
+\begin{equation}
+\label{defdL}
+\frac{\mathrm{d}\vec{L}}{\mathrm{d}t}=\vec{r}\times m\vec{g}\,.
+\end{equation}
+Esta fuerza aplicada causa que el eje de giro cambie de dirección y, por lo tanto, el cuerpo adquiere una velocidad angular perpendicular al eje $Z$. Si esta fuerza es muy pequeña y, teniendo en cuenta que $\omega=cte$, podemos escribir \ref{defdL} como 
+\begin{equation}
+\frac{\mathrm{d}\vec{L}}{\mathrm{d}t}=d\hat{e}_z\times m\vec{g}\approx I_z \omega\, \dot{\hat{e}}_{z}
+\end{equation}
+donde hemos hecho la derivada temporal en \ref{defL} despreciando la variación en el momento de inercia. De aquí podemos deducir que 
+\begin{equation}
+\label{defOmega}
+\dot{\hat{e}}_{z}=\vec{\Omega}\times \hat{e}_z\;\text{con}\,\vec{\Omega}\equiv -\frac{dmg}{I_z\omega}\hat{g}\,.
+\end{equation}
+Este fenómeno por el que el eje de rotación cambia de dirección se llama \textit{precesión} y la velocidad angular con la que rota, $\vec{\Omega}$, se llama velocidad angular de precesión.
+
+Hay otro fenómeno característico de un giróscopo, llamado \textit{nutación}. Conocidos los ángulos de Euler (ver Figura \ref{fig:Euler}), es fácil ver que la velocidad angular del sólido en torno a su eje es $\omega=\dot{\gamma}$ y $\dot{\alpha}$ corresponde a la precesión. Entonces, $\dot{\beta}$ representará un tercer movimiento al que hemos llamado nutación. Suponiendo la conservación de la energía, es demostrable que 
+\begin{equation}
+\label{nutacion}
+\dot{\beta}=\frac{A-B\cos\beta}{I_{12}\sin^2\beta}\, ,
+\end{equation}
+donde $A$ y $B$ son constantes y $I_{12}$ es el momento de inercia respecto a los ejes contenidos en el plano perpendicular al eje de rotación. Si $\beta$ adquiere un valor único habrá una precesión estacionaria; en cambio, si el ángulo oscila entre dos valores $\beta_a$ y $\beta_b$, podemos distinguir tres casos:
+\begin{enumerate}
+\item $\dot{\beta}$ nunca se anula, es decir, $\arccos\left(\frac{A}{B}\right)>\beta_b$ o $\arccos\left(\frac{A}{B}\right)<\beta_a$ . Entonces el eje precesa alrededor de la vertical (dirección $Z$) y su posición oscila periódicamente entre los ángulos. El movimiento proyectado es similar a una función seno o coseno.
+\item Si $\beta_a<\arccos\left(\frac{A}{B}\right)<\beta_b$, el eje se mueve realizando bucles, $\dot{\beta}$ cambia de signo cuando el eje de rotación pasa de estar en la parte superior a la parte inferior del bucle.
+\item En el caso límite $\arccos\left(\frac{A}{B}\right)=\beta_a$, el giróscopo oscila haciendo cúspides. El eje de rotación queda instantáneamente en reposo en la parte superior de cada cúspide.
+\end{enumerate}
+\section{Material y metodología}
+Los materiales utilizados para esta demostración experimental son:
+\begin{itemize}
+\item Giróscopo Pasco ME 8960 (un disco plano capaz de girar en torno a su eje de revolución).
+\item Pesas portátiles de diferentes masas.
+\item Portapesas.
+\item Polea.
+\item Hilo.
+\item Tres sensores.
+\item Programas de DataStudio.
+\end{itemize}
+Para la determinación del momento de inercia del giróscopo se siguen los siguientes pasos, basados en el anterior \ref{sec:fundamento}:
+\begin{enumerate}
+\item Colocar en un extremo del hilo el portapesas con pesas medidas anteriormente. Pasar el hilo por la polea y unirlo al giróscopo.
+\item Liberar el portapesas para que caiga mueva la polea. Recoger datos de la aceleración del disco con el ordenador. 
+\item Repetir el proceso hasta tomar las medidas necesarias.
+\end{enumerate}
+Para la determinación de la velocidad angular de precesión se siguen los siguientes pasos:
+\begin{enumerate}
+\item Equilibrar el giróscopo.
+\item Colocar una masa ya medida en el extremo del giróscopo. Anotar la distancia $d$ entre la masa y el eje de giro.
+\item Quitar la pesa utilizada. Abrir el programa de DataStudio y, sujetando el eje del giroscopio poner en marcha el aparato utilizando el hilo para dar impulso. La eficiencia de la toma de datos aumenta cuanto mayor sea la velocidad proporcionada.
+\item Con ayuda del sensor, determinar la velocidad angular de rotación.
+\item Mientras el disco gira, colocar la pesa en la posición indicada y, con ayuda del otro sensor, medir la velocidad angular de precesión.
+\item Una vez medida, soltar el eje de rotación y quitar la pesa. Volver a medir la velocidad de rotación. 
+\item Repetir el proceso haciendo girar el disco en sentido contrario.
+\end{enumerate}
+Finalmente, para la determinación de la velocidad angular de nutación se siguen los siguientes pasos:
+\begin{enumerate}
+\item Abrir el tercer programa de DataStudio y colocar el eje del disco formando 30º con la horizontal.
+\item Determinar la velocidad angular de rotación (al principio y al final del ensayo), de precesión y de nutación con ayuda de los sensores.
+\item Repetir el paso 2 pero empujando suavemente el eje del disco en la dirección de la precesión. Anotar el movimiento observado.
+\item Repetir el paso 2 pero ahora empujando en sentido contrario.
+\end{enumerate}
+\section{Datos recogidos}
+En primer lugar se tomaron medidas de los parámetros básicos para el ensayo. 
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\cline{2-3}
+\multicolumn{1}{c|}{}& Radio & Espesor\\
+\hline
+Disco&$\left(12,7\pm 0,1\right)\times 10^{-2}\,\text{m}$&$\left(2,1\pm 0,1\right)\times 10^{-2}\,\text{m}$\\
+\hline
+Polea&$\left(2,3\pm 0,1\right)\times 10^{-2}\,\text{m}$&\multicolumn{1}{c}{}\\
+\cline{1-2}
+\end{tabular}
+\caption{Parámetros del disco y la polea}
+\end{center}
+\end{table}
+También se midieron las masas disponibles.
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|}
+\cline{2-2}
+\multicolumn{1}{c|}{}&$\left( \text{Masa}\pm 0,1\right) \times 10^{-3}\,\text{kg}$\\ \hline
+$m_1$&$101,6$\\ \hline
+$m_2$&$132,1$\\ \hline
+$m_3$&$71,0$\\ \hline
+$m_4$&$40,4$\\ \hline
+$m_5$&$162,4$\\ \hline
+\end{tabular}
+\caption{Masas utilizadas en el la primera parte}
+\end{center}
+\end{table}
+Para la segunda y tercera parte de esta experiencia, se usa una masa $m=\left(152,6\pm 0,1\right)\times 10^{-3} \text{kg}$. El parámetro $d$ utilizado en la ecuación \ref{defOmega} es $d=\left(32,0\pm 0,1\right)\times 10^{-2} \text{m}$. 
+
+Durante la observación de la nutación se recogieron gráficas en cada ensayo, similares al siguiente ejemplo:
+\begin{figure}
+\begin{center}
+\includegraphics[height=8 cm]{nuta1.png}
+\caption{Observación representativa del fenómeno de la nutación.}
+\end{center}
+\end{figure}
+\section{Resultados}
+Siguiendo la metodología \ref{sec:metodo} citada, se realizaron varios ensayos para calcular el momento de inercia del giróscopo. Es demostrable \ref{inercia} que, para una disposición como la indicada, podemos obtener el momento de inercia a partir de la aceleración $\vec{a}$ de la pesa que cae. Los resultados conseguidos fueron los siguientes.
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Ensayo & Aceleración $\left(\text{m/s}^2\right)$ & Masa $\left(\pm 0,0001\,\text{kg}\right)$ & Momento de inercia $\left(\text{kg/m}^2\right)$\\
+\hline
+1 & $0,06220\pm 0,00024$ & $0,1016$ & $0,842\pm 0,008$\\
+\hline
+2 & $0,0817\pm 0,0005$ & $0,1321$ & $0,832\pm 0,009$\\
+\hline
+3 & $0,0431\pm 0,0004$ & $0,0710$ & $0,851\pm 0,010$\\
+\hline
+4 & $0,02380\pm 0,00016$ & $0,0405$ & $0,881\pm 0,010$\\
+\hline
+5 & $0,1030\pm 0,0005$ & $0,1624$ & $0,809\pm 0,008$\\
+\hline
+Promedio & $0,0628\pm 0,0004$ & $0,1015$ & $0,843\pm 0,009$\\
+\hline
+\end{tabular}
+\caption{Datos y resultados para el momento de inercia.}
+\end{center}
+\end{table}
+Luego el momento de inercia del disco es 
+\begin{equation}
+I_z=0,843\pm 0,009\,\text{kg/m}^2\,.
+\end{equation}
+En la segunda parte de la demostración, se midieron la velocidad angular inicial $\omega_1$, la velocidad angular de precesión $\vec{\Omega}_{exp}$ y la velocidad angular inicial $\omega_2$. También se calculó el valor teórico para la velocidad de precesión $\vec{\Omega}_{teo}$ usando la expresión \ref{defOmega}. Los resultados para los distintos ensayos son:
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Ensayo & $\omega_1\,\left(\pm 0,001\,\text{rad/s}\right)$ & $\vec{\Omega}_{exp}\,\left(\text{rad/s}\right)$ & $\omega_2\,\left(\pm 0,001\,\text{rad/s}\right)$ & $\vec{\Omega}_{teo}\,\left(\text{rad/s}\right)$ \\
+\hline
+1 & $57,461$ & $0,4180\pm 0,0004\,\vec{g}$ & $49,099$ & $0,421\pm 0,005\,\vec{g}$ \\
+\hline
+2 & $57,46145,397$ & $0,507\pm 0,0001\,\vec{g}$ & $38,811$ & $0,526\pm 0,006\,\vec{g}$ \\
+\hline1 & $49,943$ & $0,4620\pm 0,0006\,\vec{g}$ & $44,999$ & $0,472\pm 0,005\,\vec{g}$ \\
+\hline
+\end{tabular}
+\caption{Datos recogidos y resultados para la velocidad angular de precesión}
+\end{center}
+\end{table}
+Finalmente, en el estudio del movimiento de nutación se realizaron varios ensayos siguiento la metodología \ref{sec:metodo}. En casi todos los ensayos se observó que el eje del disco describía bucles (Caso 2) salvo en uno solo, donde se registró una trayectoria con cúspides (Caso 3). A continuación se muestran dos ejemplos de las gráficas recogidas.
+\begin{figure}
+\begin{center}
+\includegraphics[height=8 cm]{nuta2.png}
+\caption{Observación del segundo caso de nutación.}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics[height=8 cm]{nuta3.png}
+\caption{Observación del tercer caso de nutación.}
+\end{center}
+\end{figure}
+\section{Conclusiones}
+Siguiendo los pasos descritos se calculó el momento de inercia a partir de medidas de la aceleración y se obtuvo el resultado final de $I_z=0,843\pm 0,009\,\text{kg/m}^2$ con una dispersión de $\sigma=0,022\,\text{kg/m}^2$. Este valor de dispersión significa que los valores obtenidos son próximos, luego las medidas y los cálculos se realizaron con precisión.
+
+Respecto a la determinación de la velocidad angular de precesión, la comparación entre los valores medidos y los cálculos arroja errores relativos en los módulos menores al 2\% para todos los casos, mientras que la dirección y sentido coinciden. Así pues estos cálculos tienen exactitud y precisión. También es importante notar que, comparando la velocidad angular inicial y final de rotación, observamos que el disco es efectivamente frenado, es decir, $\omega$ no es estrictamente constante. Atribuimos este hecho a rozamientos entre el disco y su eje de giro.
+
+Finalmente, se observaron los movimientos de nutación descritos en la sección de \ref{sec:resultados} y se descubrió que en las condiciones del laboratorio había preferencia por el caso 2 de nutación (bucles), salvando una excepción en la que se observó el caso 3 (cúspides). Además se comprobó cualitativamente que el cabeceo o nutación se reduce si se empuja el eje del giroscopio en sentido de la precesión y, recíprocamente, al aplicar una fuerza externa en sentido opuesto al movimiento de precesión, el cabeceo se acrecenta.
+\section*{Apéndices}
+\subsection*{Apéndice de errores}
+\subsection*{Apéndice de imágenes}
 \nocite{*}
 \bibliographystyle{unsrt}
 \bibliography{mecanica.bib}
