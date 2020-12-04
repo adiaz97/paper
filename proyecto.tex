@@ -4,7 +4,7 @@
 \usepackage{anysize}
 \usepackage{setspace}
 \usepackage{xcolor}
-%\usepackage{float}
+\usepackage{float}
 \usepackage[pdftex]{graphicx}
 \usepackage{amsmath}
 \usepackage[hypcap=true]{caption}
@@ -18,15 +18,18 @@
 %\date{Sesión del 7 de Diciembre de 2016}
 \maketitle
 \begin{abstract}
-\url{https://github.com/adiaz97/paper}
+\url{https://github.com/adiaz97/proyecto_final}
 
-En este informe se reproduce un experimento para analizar el movimiento de un sólido rígido. El objetivo principal es la determinación de uno de los momentos de inercia de este sólido y el estudio de su rotación, precesión y nutación.
+En este informe se reproduce un experimento para analizar el movimiento de un sólido rígido. El objetivo principal es la determinación empírica de uno de los momentos de inercia de un disco plano que gira sobre su eje de simetría. También se estudiará su rotación, precesión y nutación. En la toma de datos y su procesamiento se usaron programas específicos para experimentos de esta clase, enlazados a los sensores de medición. 
 
+\textbf{Palabras clave}: \textit{Sólido rígido. Rotación. Precesión. Nutación. Momento de inercia.}
 \end{abstract}
 
 \section{Introducción}
 El movimiento giroscópico es el de un cuerpo que gira en torno a un eje móvil. En el caso concreto del giróscopo, el cuerpo tiene simetría de revolución y gran momento de inercia respecto al eje de giro. 
-De la misma manera que la masa de un objeto está relacionada con su resistencia a cambiar su desplazamiento, el momento de inercia para un cierto sólido no es más que una magnitud que mide su resistencia a la rotación en cierto punto. Si el sólido tiene ciertas simetrías, el momento de inercia puede ser el mismo en varios puntos, en un eje o incluso en todo el sólido. El momento de inercia para cualquier sólido solo depende de la distribución de masa dentro del volumen que ocupa. Para su cálculo se puede usar su definición $I=\int^{M}_{0} r^2\mathrm{d}m$ donde $r$ es el módulo de la distancia al eje de rotación. Esta definición es válida cuando el eje de rotación del sólido coincide con alguno de los ejes principales (si existen) que son ejes perpendiculares entre sí y aportan información sobre simetrías del cuerpo. En general, puede haber desde 0 hasta 3 ejes de simetría distintos (llamados $X$, $Y$ y $Z$). 
+
+De la misma manera que la masa de un objeto está relacionada con su resistencia a cambiar su desplazamiento, el momento de inercia para un cierto sólido no es más que una magnitud que mide su resistencia a la rotación en un punto. Si su geometría tiene ciertas simetrías, el momento de inercia puede ser el mismo en varios puntos, en un eje o incluso en todo el sólido. El momento de inercia para cualquier sólido solo depende de la distribución de masa dentro del volumen que ocupa. Para su cálculo se puede usar su definición $I=\int^{M}_{0} r^2\mathrm{d}m$ donde $r$ es el módulo de la distancia al eje de rotación. Esta definición es válida cuando el eje de rotación del sólido coincide con alguno de los ejes principales (si existen). Los ejes principales son ejes que aportan información sobre simetrías del cuerpo. En general, puede haber desde 0 hasta 3 ejes de simetría distintos (llamados $X$, $Y$ y $Z$). 
+
 También hay otra manera de conocer el momento de inercia para un sólido, aprovechando las simetrías y las leyes de la Mecánica. Por ejemplo, supongamos un disco circular con un cierto espesor, que puede hacerse girar sobre su eje de revolución a través de una polea que une el eje del disco con una masa libre para caer (ver \autoref{fig:disco1}).
 \begin{figure}[h]
 \begin{center}
@@ -37,10 +40,15 @@ También hay otra manera de conocer el momento de inercia para un sólido, aprov
 \end{figure}
 Podemos aplicar la segunda Ley de Newton en su versión angular:
 \begin{equation}
-\sum F=m_d a_d\equiv \sum M=I\alpha\,.
+\sum F=m_d a_d\Leftrightarrow \sum M=I\alpha\,.
 \end{equation}
-Donde $\sum F$ es la suma de todas las fuerzas externas ejercidas sobre el disco, $m_d$ es su masa, $a_d$ es la aceleración lineal que adquiere, $\sum M$ es la suma de los momentos de las fuerzas externas  y $\alpha$ es la aceleración angular.
-Sabemos que, al estar causando la rotación con la polea, se produce un movimiento de rodadura en el disco, entonces $\alpha=\frac{a}{R}$. Por otro lado, por la definición del momento de una fuerza tenemos que $\sum M=\vec{R}\times\vec{F}$ siendo $\vec{R}$ la distancia desde la fuerza al punto de aplicación. Así, pues, el momento de inercia en el eje de rotación (que es un eje principal del disco) es 
+Aquí, $\sum F$ es la suma de todas las fuerzas externas ejercidas sobre el disco, $m_d$ es su masa, $a_d$ es la aceleración lineal que adquiere, $\sum M$ es la suma de los momentos de las fuerzas externas  y $\alpha$ es la aceleración angular.
+Sabemos que, al estar causando la rotación con la polea, se produce un movimiento de rodadura en el disco, entonces $\alpha=\frac{a}{R}$. Por otro lado, por la definición del momento de una fuerza tenemos que 
+\begin{equation}
+M=\vec{R}\times\vec{F}\,,
+\label{eq:defM}
+\end{equation}
+siendo $\vec{R}$ la distancia desde la fuerza al punto de aplicación. Así, pues, el momento de inercia en el eje de rotación (que es un eje principal del disco) es 
 \begin{equation}
 I=\frac{R^2\times F_{eje}}{a}\,.
 \label{eq:inercia}
@@ -56,35 +64,39 @@ I=mR^2\left(\frac{g}{a}-1\right)\,.
 \label{eq:inerciadisco}
 \end{equation}
 
-De esta manera, observamos que cuanto mayor es la masa y el radio del disco mayor es el momento de inercia, esto es, más resistencia opone a girar si está en reposo o a dejar de girar si estaba en movimiento. También observamos que al aumentar la aceleración de la polea (el tirón de la cuerda) disminuye el momento de inercia.
-Este sencillo cálculo servirá de base para la experiencia registrada en el informe, pero los conceptos son fácilmente generalizables a cualquier sólido rígido.
+Con este resultado, observamos la influencia de la masa, el radio y la aceleración del disco sobre el momento de inercia. Llevaremos este sencillo ejemplo a la práctica para ilustrar otros efectos dinámicos. Este cálculo servirá de base para la experiencia registrada en el informe, pero los conceptos son fácilmente generalizables a cualquier sólido rígido.
+
+El momento de inercia es una magnitud esencial en los problemas de dinámica. Conocer su valor teórico es importante, pero medirlo en un laboratorio es indispensable, ya que así se puede comprobar, por ejemplo, que la distribución de masa de un objeto es homogénea (o no).
+
 \section{Fundamento Teórico} \label{sec:fundamento}
-Supóngase un sólido libre de girar sin rozamiento en torno a un punto fijo cuya velocidad angular inicial $\omega$ es constante y se encuentra en la parte positiva del eje $Z$. Su momento angular $\vec{L}$ quedará definido por:
+Hemos dicho que el momento de inercia se basa en las simetrías del cuerpo que se considera, pero perturbar esas simetrías también provoca efectos interesantes, como veremos. 
+
+Supongamos un sólido libre de girar sin rozamiento en torno a un punto fijo, cuya velocidad angular inicial $\omega$ es constante y se encuentra en la parte positiva del eje $Z$. Su momento angular $\vec{L}$ se define como:
 \begin{equation}
 \label{eq:defL}
-\vec{L}=I_z \omega\, \hat{e}_{z}
+\vec{L}=I_z \omega\, \hat{e}_{z}\,,
 \end{equation}
-Siendo $I_z$ el momento de inercia respecto al eje $Z$ y $\hat{e}_{z}$ el vector unitario de ese mismo eje. En ausencia de momentos externos $\vec{M}_{ext}$	el momento angular no varía y se mantiene la dirección del eje de rotación. Matemáticamente
+siendo $I_z$ el momento de inercia respecto al eje $Z$ y $\hat{e}_{z}$ el vector unitario de ese mismo eje. En ausencia de momentos externos $\vec{M}_{ext}$, el momento angular no varía y se mantiene la dirección del eje de rotación. Matemáticamente
 \begin{equation}
 \frac{\mathrm{d}\vec{L}}{\mathrm{d}t}=\sum \vec{M}_{ext} =0\Leftrightarrow\vec{L}=cte\,.
 \end{equation}
-Si se cuelga un cuerpo de masa $m$ en un extremo del eje $Z$, se ejerce una fuerza peso $\vec{P}=m\vec{g}$ y, sabiendo que el momento de una fuerza es el producto vectorial de esta por el vector posición del punto de aplicación de la fuerza $\vec{r}\equiv d\hat{e}_z$, entonces obtenemos la siguiente ecuación: 
+Si se cuelga un cuerpo de masa $m$ en un extremo del eje $Z$, se ejerce una fuerza peso $\vec{P}=m\vec{g}$ y, sabiendo que el momento de una fuerza es el producto vectorial de esta por el vector posición $\vec{r}$ del punto de aplicación de la fuerza \eqref{eq:defM}, entonces obtenemos la siguiente ecuación: 
 \begin{equation}
 \label{eq:defdL}
 \frac{\mathrm{d}\vec{L}}{\mathrm{d}t}=\vec{r}\times m\vec{g}\,.
 \end{equation}
-Esta fuerza aplicada causa que el eje de giro cambie de dirección y, por lo tanto, el cuerpo adquiere una velocidad angular perpendicular al eje $Z$. Si esta fuerza es muy pequeña y, teniendo en cuenta que $\omega=cte$, podemos escribir \eqref{eq:defdL} como 
+Esta fuerza aplicada causa que el eje de giro cambie de dirección y, por lo tanto, el cuerpo adquiere una velocidad angular perpendicular al eje $Z$. Si esta fuerza es muy pequeña y, teniendo en cuenta que $\omega=cte$ además de $\vec{r}\equiv d\hat{e}_z$, podemos escribir \eqref{eq:defdL} como 
 \begin{equation}
 \frac{\mathrm{d}\vec{L}}{\mathrm{d}t}=d\hat{e}_z\times m\vec{g}\approx I_z \omega\, \dot{\hat{e}}_{z}
 \end{equation}
 donde hemos hecho la derivada temporal en \eqref{eq:defL} despreciando la variación en el momento de inercia. De aquí podemos deducir que 
 \begin{equation}
 \label{eq:defOmega}
-\dot{\hat{e}}_{z}=\vec{\Omega}\times \hat{e}_z\;\text{con}\,\vec{\Omega}\equiv -\frac{dmg}{I_z\omega}\hat{g}\,.
+\dot{\hat{e}}_{z}=\vec{\Omega}\times \hat{e}_z\;\;\text{con}\;\;\vec{\Omega}\equiv -\frac{dmg}{I_z\omega}\hat{g}\,.
 \end{equation}
 Este fenómeno por el que el eje de rotación cambia de dirección se llama \textit{precesión} y la velocidad angular con la que rota, $\vec{\Omega}$, se llama velocidad angular de precesión.
 
-\begin{figure}[h]
+\begin{figure}
 \begin{center}
 \includegraphics[width=8 cm]{euler.png}
 \caption{Ángulos de Euler de un sólido cuyo \textcolor{red}{sistema de referencia propio} gira respecto al \textcolor{blue!70!cyan!85!white}{sistema de referencia del laboratorio} (azul)}
@@ -103,10 +115,14 @@ donde $A$ y $B$ son constantes y $I_{12}$ es el momento de inercia respecto a lo
 \item Si $\beta_a<\arccos\left(\frac{A}{B}\right)<\beta_b$, el eje se mueve realizando bucles, $\dot{\beta}$ cambia de signo cuando el eje de rotación pasa de estar en la parte superior a la parte inferior del bucle.
 \item En el caso límite $\arccos\left(\frac{A}{B}\right)=\beta_a$, el giróscopo oscila haciendo cúspides. El eje de rotación queda instantáneamente en reposo en la parte superior de cada cúspide.
 \end{enumerate}
+
+En la experiencia realizada, se observará el efecto de precesión y nutación y se comprobará su adecuación a los casos mencionados bajo las condiciones experimentales.
+
 \section{Material y metodología} \label{sec:metodo}
+
 Los materiales utilizados para esta demostración experimental son:
 \begin{itemize}
-\item Giróscopo Pasco ME 8960 (un disco plano capaz de girar en torno a su eje de revolución, ver \autoref{fig:pasco}).
+\item Giróscopo Pasco ME 8960. Consiste en un disco plano capaz de girar en torno a su eje de revolución. Este eje puede inclinarse respecto a la horizontal además de rotar sobre un punto (ver \autoref{fig:pasco}).
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=12cm]{disco2.png}
@@ -121,7 +137,7 @@ Los materiales utilizados para esta demostración experimental son:
 \item Tres sensores.
 \item Programas de DataStudio.
 \end{itemize}
-Para la determinación del momento de inercia del giróscopo se siguen los siguientes pasos, basados en el anterior \autoref{sec:fundamento}:
+En primer lugar, se determinará el momento de inercia del giróscopo siguiendo los siguientes pasos, fundamentados en la \autoref{sec:fundamento}:
 \begin{enumerate}
 \item Colocar en un extremo del hilo el portapesas con pesas medidas anteriormente. Pasar el hilo por la polea y unirlo al giróscopo.
 \item Liberar el portapesas para que caiga mueva la polea. Recoger datos de la aceleración del disco con el ordenador. 
@@ -145,8 +161,8 @@ Finalmente, para la determinación de la velocidad angular de nutación se sigue
 \item Repetir el paso 2 pero ahora empujando en sentido contrario.
 \end{enumerate}
 \section{Datos recogidos}
-En primer lugar se tomaron medidas de los parámetros básicos para el ensayo (ver \autoref{tab:radios}). También se midieron las masas disponibles (ver \autoref{tab:masas}).
-\begin{table}[h]
+En primer lugar se tomaron medidas de los parámetros básicos para el ensayo y se anotaron en la  \autoref{tab:radios}. También se midieron las masas disponibles   (ver \autoref{tab:masas}).
+\begin{table}
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \cline{2-3}
@@ -161,7 +177,7 @@ Polea&$\left(2,3\pm 0,1\right)\times 10^{-2}\,\text{m}$&\multicolumn{1}{c}{}\\
 \label{tab:radios}
 \end{center}
 \end{table}
-\begin{table}[h]
+\begin{table}
 \begin{center}
 \begin{tabular}{|c|c|}
 \cline{2-2}
@@ -176,18 +192,23 @@ $m_5$&$162,4$\\ \hline
 \label{tab:masas}
 \end{center}
 \end{table}
-Para la segunda y tercera parte de esta experiencia, se usa una masa $m=\left(152,6\pm 0,1\right)\times 10^{-3} \text{kg}$. El parámetro $d$ utilizado en la ecuación \eqref{eq:defOmega} es $d=\left(32,0\pm 0,1\right)\times 10^{-2} \text{m}$. 
+Para la segunda y tercera parte de esta experiencia, se usa una masa $m=\left(152,6\pm 0,1\right)\times 10^{-3}\,\text{kg}$. El parámetro $d$ utilizado en la ecuación \eqref{eq:defOmega} es $d=\left(32,0\pm 0,1\right)\times 10^{-2}\, \text{m}$. 
 
-Durante la observación de la nutación se recogieron gráficas en cada ensayo, similares a la \autoref{fig:nuta1}
-\begin{figure}[h]
+Durante la observación de la nutación se recogieron gráficas en cada ensayo, similares a la \autoref{fig:nuta1}.
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=12 cm]{nuta1.png}
 \caption{Observación representativa del fenómeno de la nutación.}
 \label{fig:nuta1}
 \end{center}
 \end{figure}
+
 \section{Resultados} \label{sec:resultados}
-Siguiendo la metodología \ref{sec:metodo} citada, se realizaron varios ensayos para calcular el momento de inercia del giróscopo. Es demostrable que, para una disposición como la indicada, podemos obtener el momento de inercia a partir de la aceleración $\vec{a}$ de la pesa que cae (\autoref{eq:inercia}). Los resultados conseguidos se recogen en la \autoref{tab:inercia}.
+
+Siguiendo la metodología citada en la \autoref{sec:metodo}, se realizaron varios ensayos para calcular el momento de inercia del giróscopo. Es demostrable que, para una disposición como la indicada, podemos obtener el momento de inercia a partir de la aceleración $\vec{a}$ de la pesa que cae (\autoref{eq:inercia}). Los resultados conseguidos se recogen en la \autoref{tab:inercia}. Tomando el promedio de los valores conseguidos, el momento de inercia del disco es
+\begin{equation}
+I_z=0,843\pm 0,009\,\text{kg/m}^2\,.
+\end{equation}
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
@@ -211,11 +232,8 @@ Promedio & $0,0628\pm 0,0004$ & $0,1015$ & $0,843\pm 0,009$\\
 \label{tab:inercia}
 \end{center}
 \end{table}
-Luego el momento de inercia del disco es 
-\begin{equation}
-I_z=0,843\pm 0,009\,\text{kg/m}^2\,.
-\end{equation}
-En la segunda parte de la demostración, se midieron la velocidad angular inicial $\omega_1$, la velocidad angular de precesión $\vec{\Omega}_{exp}$ y la velocidad angular inicial $\omega_2$. También se calculó el valor teórico para la velocidad de precesión $\vec{\Omega}_{teo}$ usando la expresión \eqref{eq:defOmega}. Los resultados para los distintos ensayos están en la tabla \autoref{tab:precesion}.
+
+En la segunda parte de la demostración, se midieron la velocidad angular inicial $\omega_1$, la velocidad angular de precesión $\vec{\Omega}_{exp}$ y la velocidad angular inicial $\omega_2$. También se calculó el valor teórico para la velocidad de precesión $\vec{\Omega}_{teo}$ usando la expresión \eqref{eq:defOmega}. Los resultados para los distintos ensayos están en la \autoref{tab:precesion}.
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -232,27 +250,30 @@ Ensayo & $\omega_1\,\left(\pm 0,001\,\text{rad/s}\right)$ & $\vec{\Omega}_{exp}\
 \label{tab:precesion}
 \end{center}
 \end{table}
+
 Finalmente, en el estudio del movimiento de nutación se realizaron varios ensayos siguiendo la metodología en la \autoref{sec:metodo}. En casi todos los ensayos se observó que el eje del disco describía bucles (Caso 2) salvo en uno solo, donde se registró una trayectoria con cúspides (Caso 3). A continuación se muestran dos ejemplos de las gráficas recogidas en las Figuras \ref{fig:nuta2} y \ref{fig:nuta3}.
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=12 cm]{nuta2.png}
 \caption{Observación del segundo caso de nutación.}
 \label{fig:nuta2}
 \end{center}
 \end{figure}
-\begin{figure}[h]
+
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=12 cm]{nuta3.png}
 \caption{Observación del tercer caso de nutación.}
 \label{fig:nuta3}
 \end{center}
 \end{figure}
+
 \section{Conclusiones}
 Siguiendo los pasos descritos se calculó el momento de inercia a partir de medidas de la aceleración y se obtuvo el resultado final de $I_z=0,843\pm 0,009\,\text{kg/m}^2$ con una dispersión de $\sigma=0,022\,\text{kg/m}^2$. Este valor de dispersión significa que los valores obtenidos son próximos, luego las medidas y los cálculos se realizaron con precisión.
 
-Respecto a la determinación de la velocidad angular de precesión, la comparación entre los valores medidos y los cálculos en la \autoref{tab:Omega} arroja errores relativos en los módulos menores al 2\% para todos los casos, mientras que la dirección y sentido coinciden. Así pues estos cálculos tienen exactitud y precisión. También es importante notar que, comparando la velocidad angular inicial y final de rotación, observamos que el disco es efectivamente frenado, es decir, $\omega$ no es estrictamente constante. Atribuimos este hecho a rozamientos entre el disco y su eje de giro.
+Respecto a la determinación de la velocidad angular de precesión, la comparación entre los valores medidos y los cálculos en la \autoref{tab:Omega} arroja errores relativos en los módulos menores al 2\% para todos los casos, mientras que la dirección y sentido coinciden. Así pues, estos cálculos tienen exactitud y precisión. También es importante notar que, comparando la velocidad angular inicial y final de rotación, observamos que el disco es frenado, es decir, $\omega$ no es estrictamente constante. Atribuimos este hecho a rozamientos entre el disco y su eje de giro.
 
-\begin{table}[h]
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -270,7 +291,10 @@ $0,4620\pm 0,0006$ & $0,472\pm 0,005$ & 1,04\\
 \end{center}
 \end{table}
 
-Finalmente, se observaron los movimientos de nutación descritos en la  \eqref{sec:resultados} y se descubrió que en las condiciones del laboratorio había preferencia por el caso 2 de nutación (bucles), salvando una excepción en la que se observó el caso 3 (cúspides). Además se comprobó cualitativamente que el cabeceo o nutación se reduce si se empuja el eje del giroscopio en sentido de la precesión y, recíprocamente, al aplicar una fuerza externa en sentido opuesto al movimiento de precesión, el cabeceo se acrecenta.
+Finalmente, se observaron los movimientos de nutación descritos en la  \autoref{sec:resultados} y se descubrió que en las condiciones del laboratorio había preferencia por el caso 2 de nutación (bucles), salvando una excepción en la que se observó el caso 3 (cúspides). Además se comprobó cualitativamente que el cabeceo o nutación se reduce si se empuja el eje del giroscopio en sentido de la precesión y, recíprocamente, al aplicar una fuerza externa en sentido opuesto al movimiento de precesión, el cabeceo se acrecenta.
+
+
+
 \section*{Apéndices}
 \subsection*{Apéndice de errores}
 \begin{itemize}
